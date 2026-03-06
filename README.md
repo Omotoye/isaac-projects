@@ -38,7 +38,7 @@ ROS2-first Isaac Sim 5.1 project for fast warehouse simulation, benchmarking, an
 ## Quick Start
 
 ```bash
-git clone <YOUR_GITHUB_REPO_URL> isaac-projects
+git clone https://github.com/Omotoye/isaac-projects.git isaac-projects
 cd ~/isaac-sim
 ./python.sh ~/isaac-projects/fast_isaac_sim.py \
   --headless \
@@ -131,20 +131,8 @@ ros2 topic list | rg -i '(lidar|pointcloud|pcl|lidar_points)'
 - `--target-sim-hz <hz>`: real-time pacing target.
 - `--disable-physx-laserscan`: keep authored RTX scan path (skip auto PhysX swap).
 
-## Publish To GitHub
-
-```bash
-cd ~/isaac-projects
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin <YOUR_GITHUB_REPO_URL>
-git push -u origin main
-```
-
 > [!WARNING]
-> This repo currently includes large USD content (for example `test_factory.usda`). If history grows, consider Git LFS for large binary assets.
+> This repo includes large USD content (for example `test_factory.usda`). If history grows, consider Git LFS for large binary assets.
 
 ## Cloud Deployment Notes
 
