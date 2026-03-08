@@ -1880,7 +1880,9 @@ def main() -> None:
 
     stage = usd_ctx.get_stage()
     stage_url = usd_ctx.get_stage_url() or "(in-memory stage)"
-    is_hospital_scene = "hospital_experiment.usda" in ((args.usd_path or "") + " " + str(stage_url))
+    scene_marker = ((args.usd_path or "") + " " + str(stage_url)).lower()
+    is_hospital_scene = "hospital_experiment.usda" in scene_marker
+    is_hospital_family_scene = "hospital_experiment" in scene_marker
     if stage:
         print(f"[fast_isaac_sim] Startup phase: stage loaded ({stage_url})")
     else:
@@ -1983,10 +1985,10 @@ def main() -> None:
             f" lidar_enable_updates={profile_stats['lidar_enable_updates']}"
         )
 
-    if is_hospital_scene:
-        # Keep authored RTX lidar graph for hospital scene and skip auto PhysX swap.
+    if is_hospital_family_scene:
+        # Keep authored RTX lidar graph for hospital scene family and skip auto PhysX swap.
         args.disable_physx_laserscan = True
-        print("[fast_isaac_sim] Hospital lidar profile: authored RTX 2D lidar (front/back) enabled in scene")
+        print("[fast_isaac_sim] Hospital lidar profile: authored RTX lidar graph (PhysX auto-swap disabled)")
 
     playback_tick_ros_graphs: list[str] = []
     if args.enable_ros2:

@@ -1,0 +1,2108 @@
+#usda 1.0
+(
+    customLayerData = {
+        dictionary cameraSettings = {
+            dictionary Front = {
+                double3 position = (50000.000000000015, -1.1102230246251565e-11, 0)
+                double radius = 500
+            }
+            dictionary Perspective = {
+                double3 position = (4.999999999999999, 5, 5.0000000000000036)
+                double3 target = (-3.978038876084611e-8, -3.978038609631085e-8, 7.95607677517296e-8)
+            }
+            dictionary Right = {
+                double3 position = (0, -50000, -1.1102230246251565e-11)
+                double radius = 500
+            }
+            dictionary Top = {
+                double3 position = (0, 0, 50000)
+                double radius = 500
+            }
+            string boundCamera = "/World/hospital/Camera"
+        }
+        dictionary navmeshSettings = {
+            double agentHeight = 180
+            double agentMaxFloorSlope = 45
+            double agentMaxStepHeight = 0.4
+            double agentRadius = 20
+            dictionary areas = {
+                dictionary "0" = {
+                    string areaName = "Walkable"
+                    float3 color = (0.2, 0.8, 1)
+                    double defaultCost = 1
+                }
+            }
+            bool excludeRigidBodies = 1
+        }
+        dictionary omni_layer = {
+            string authoring_layer = "./multiple_robot_carter_hospital_navigation.usd"
+            dictionary locked = {
+            }
+            dictionary muteness = {
+            }
+        }
+        dictionary renderSettings = {
+        }
+    }
+    defaultPrim = "World"
+    endTimeCode = 10000
+    metersPerUnit = 1
+    startTimeCode = 0
+    timeCodesPerSecond = 60
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def DistantLight "defaultLight" (
+        prepend apiSchemas = ["ShapingAPI"]
+    )
+    {
+        float angle = 1
+        custom float inputs:angle = 1
+        custom float inputs:intensity = 3000
+        custom float inputs:shaping:cone:angle = 180
+        custom float inputs:shaping:cone:softness = 0
+        custom float inputs:shaping:focus = 0
+        custom color3f inputs:shaping:focusTint = (0, 0, 0)
+        float intensity = 3000
+        float shaping:cone:angle = 180
+        float shaping:cone:softness
+        float shaping:focus
+        color3f shaping:focusTint
+        asset shaping:ies:file
+        quatd xformOp:orient = (0.6532814824381883, 0.2705980500730985, 0.27059805007309845, 0.6532814824381882)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Xform "GroundPlane"
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Mesh "CollisionMesh"
+        {
+            uniform bool doubleSided = 0
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)]
+            point3f[] points = [(-25, -25, 0), (25, -25, 0), (25, 25, 0), (-25, 25, 0)]
+            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "varying"
+            )
+        }
+
+        def Plane "CollisionPlane" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            uniform token purpose = "guide"
+        }
+    }
+
+    def "hospital" (
+        instanceable = false
+        prepend references = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Environments/Hospital/hospital.usd@
+    )
+    {
+        over "Camera"
+        {
+            bool omni:kit:cameraLock = 0
+            custom vector3d omni:kit:centerOfInterest = (0, 0, -5.616726299989845)
+            quatd xformOp:orient = (0.6560438367706504, 0.48941113559923966, 0.3435382877568383, 0.4605047984894478)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (9.804196256833231, -1.8495977656925509, 1.743977177273435)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        over "Navmesh"
+        {
+            over "NavMeshVolume" (
+                prepend apiSchemas = ["NavMeshAreaAPI"]
+            )
+            {
+                string nav:area = "Walkable"
+            }
+        }
+    }
+
+    def PhysicsScene "PhysicsScene" (
+        prepend apiSchemas = ["PhysxSceneAPI"]
+    )
+    {
+        vector3f physics:gravityDirection = (0, 0, -1)
+        float physics:gravityMagnitude = 9.8
+        uniform token physxScene:broadphaseType = "MBP"
+        bool physxScene:enableGPUDynamics = 0
+    }
+
+    def OmniGraph "ROS_Clock"
+    {
+        token evaluator:type = "execution"
+        token fabricCacheBacking = "Shared"
+        int2 fileFormatVersion = (1, 9)
+        token pipelineStage = "pipelineStageSimulation"
+
+        def OmniGraphNode "on_playback_tick" (
+            prepend apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            token node:type = "omni.graph.action.OnPlaybackTick"
+            int node:typeVersion = 2
+            custom double outputs:deltaSeconds = 0
+            custom double outputs:frame = 0
+            custom uint outputs:tick = 0 (
+                customData = {
+                    bool isExecution = 1
+                }
+            )
+            custom double outputs:time = 0
+            uniform token ui:nodegraph:node:expansionState = "open"
+        }
+
+        def OmniGraphNode "ros2_context" (
+            prepend apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            custom uchar inputs:domain_id = 0
+            custom bool inputs:useDomainIDEnvVar = 1
+            token node:type = "isaacsim.ros2.bridge.ROS2Context"
+            int node:typeVersion = 2
+            custom uint64 outputs:context = 0
+            uniform token ui:nodegraph:node:expansionState = "open"
+        }
+
+        def OmniGraphNode "isaac_read_simulation_time" (
+            prepend apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            custom uint64 inputs:referenceTimeDenominator
+            custom int64 inputs:referenceTimeNumerator
+            custom bool inputs:resetOnStop = 1
+            custom int64 inputs:swhFrameNumber = 0
+            token node:type = "isaacsim.core.nodes.IsaacReadSimulationTime"
+            int node:typeVersion = 1
+            custom double outputs:simulationTime
+            uniform token ui:nodegraph:node:expansionState = "open"
+        }
+
+        def OmniGraphNode "ros2_publish_clock" (
+            prepend apiSchemas = ["NodeGraphNodeAPI"]
+        )
+        {
+            custom uint64 inputs:context = 0
+            prepend uint64 inputs:context.connect = </World/ROS_Clock/ros2_context.outputs:context>
+            custom uint inputs:execIn = 0
+            prepend uint inputs:execIn.connect = </World/ROS_Clock/on_playback_tick.outputs:tick>
+            custom string inputs:nodeNamespace = ""
+            custom string inputs:qosProfile
+            custom uint64 inputs:queueSize = 10
+            custom double inputs:timeStamp = 0
+            prepend double inputs:timeStamp.connect = </World/ROS_Clock/isaac_read_simulation_time.outputs:simulationTime>
+            custom string inputs:topicName = "clock"
+            token node:type = "isaacsim.ros2.bridge.ROS2PublishClock"
+            int node:typeVersion = 1
+            uniform token ui:nodegraph:node:expansionState = "open"
+        }
+    }
+
+    def "Nova_Carter_ROS_1" (
+        prepend payload = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Samples/ROS2/Robots/Nova_Carter_ROS.usd@
+    )
+    {
+        quatf xformOp:orient = (6.123234e-17, 0, 0, 1)
+
+        over "differential_drive"
+        {
+            over "joint_name_array"
+            {
+                custom token inputs:input0
+                delete token inputs:input0.connect = </World/Nova_Carter_ROS_1/differential_drive/joint_wheel_left_name.inputs:value>
+                prepend token inputs:input0.connect = </World/Nova_Carter_ROS_1/differential_drive/joint_wheel_left_name.inputs:value>
+                custom token inputs:input1
+                delete token inputs:input1.connect = </World/Nova_Carter_ROS_1/differential_drive/joint_wheel_right_name.inputs:value>
+                prepend token inputs:input1.connect = </World/Nova_Carter_ROS_1/differential_drive/joint_wheel_right_name.inputs:value>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter1"
+            }
+
+            over "articulation_controller"
+            {
+                custom rel inputs:targetPrim = </World/Nova_Carter_ROS_1/chassis_link>
+            }
+        }
+
+        over "front_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/left/camera_left>
+                custom bool inputs:enabled = 1
+                custom uint inputs:height = 300
+                custom uint inputs:width = 400
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/right/camera_right>
+                custom bool inputs:enabled = 0
+            }
+
+            over "left_camera_frame_id"
+            {
+            }
+
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter1/front_stereo_camera/left_rgb"
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>
+            }
+
+            over "isaac_read_simulation_time"
+            {
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter1/front_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter1"
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter1/front_stereo_camera"
+            }
+        }
+
+        over "right_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter1/right_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter1/right_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter1"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter1/right_stereo_camera"
+            }
+        }
+
+        over "left_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter1/left_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter1/left_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter1"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter1/left_stereo_camera"
+            }
+        }
+
+        over "back_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter1/rear_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter1/rear_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter1"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter1/back_stereo_camera"
+            }
+        }
+
+        over "ros_lidars"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter1"
+            }
+
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 1
+                custom bool inputs:fullScan
+            }
+
+            over "publish_back_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "publish_front_3d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 1
+            }
+
+            over "back_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
+            }
+
+            over "front_3d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "transform_tree_odometry"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter1"
+            }
+
+            over "isaac_compute_odometry_node"
+            {
+                custom rel inputs:chassisPrim = </World/Nova_Carter_ROS_1/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_chassis"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_1/chassis_link/base_link>
+                custom rel inputs:targetPrims = </World/Nova_Carter_ROS_1/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_sensors"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_1/chassis_link/base_link>
+                custom rel inputs:targetPrims = [
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/XT_32/PandarXT_32_10hz>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/left>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/right>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_owl>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_owl/camera>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_owl>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_owl/camera>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_owl>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_owl/camera>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_owl>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_owl/camera>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/chassis_imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_1/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>,
+                ]
+            }
+        }
+
+        over "front_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter1/front_fisheye_camera/left"
+            }
+        }
+
+        over "back_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/back_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter1/back_fisheye_camera/left"
+            }
+        }
+
+        over "left_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/left_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter1/left_fisheye_camera/left"
+            }
+        }
+
+        over "right_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter1/right_fisheye_camera/left"
+            }
+        }
+
+        over "chassis_imu"
+        {
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/chassis_imu/Imu_Sensor>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter1"
+            }
+        }
+
+        over "chassis_link"
+        {
+            over "sensors"
+            {
+                over "front_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "left_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "right_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "chassis_imu"
+                {
+                    over "Imu_Sensor"
+                    {
+                        custom string isaac:nameOverride (
+                            displayName = "Name Override"
+                            doc = "Name override for prim lookup in base name search"
+                        )
+                    }
+                }
+
+                over "back_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        over "caster_frame_base"
+        {
+        }
+
+        over "caster_swivel_left"
+        {
+        }
+
+        over "caster_wheel_left"
+        {
+        }
+
+        over "caster_swivel_right"
+        {
+        }
+
+        over "caster_wheel_right"
+        {
+        }
+
+        over "wheel_left"
+        {
+        }
+
+        over "wheel_right"
+        {
+        }
+
+        over "dummy_link"
+        {
+        }
+
+        over "dummy_link_2"
+        {
+        }
+
+        over "joint_caster_base"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        def Lidar "Lidar"
+        {
+            bool drawLines = 0
+            bool drawPoints = 0
+            bool enabled = 0
+            bool enableSemantics = 0
+            bool highLod = 0
+            float horizontalFov = 360
+            float horizontalResolution = 0.4
+            float maxRange = 100
+            float minRange = 0.4
+            float rotationRate = 20
+            float verticalFov = 30
+            float verticalResolution = 4
+            token visibility = "inherited"
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            float yawOffset = 0
+        }
+    }
+
+    def "Nova_Carter_ROS_2" (
+        prepend payload = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Samples/ROS2/Robots/Nova_Carter_ROS.usd@
+    )
+    {
+        quatf xformOp:orient = (6.123234e-17, 0, 0, 1)
+        double3 xformOp:translate = (4, -1, 0)
+
+        over "differential_drive"
+        {
+            over "joint_name_array"
+            {
+                custom token inputs:input0
+                delete token inputs:input0.connect = </World/Nova_Carter_ROS_2/differential_drive/joint_wheel_left_name.inputs:value>
+                prepend token inputs:input0.connect = </World/Nova_Carter_ROS_2/differential_drive/joint_wheel_left_name.inputs:value>
+                custom token inputs:input1
+                delete token inputs:input1.connect = </World/Nova_Carter_ROS_2/differential_drive/joint_wheel_right_name.inputs:value>
+                prepend token inputs:input1.connect = </World/Nova_Carter_ROS_2/differential_drive/joint_wheel_right_name.inputs:value>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter2"
+            }
+
+            over "articulation_controller"
+            {
+                custom rel inputs:targetPrim = </World/Nova_Carter_ROS_2/chassis_link>
+            }
+        }
+
+        over "front_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/left/camera_left>
+                custom bool inputs:enabled = 1
+                custom uint inputs:height = 300
+                custom uint inputs:width = 400
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/right/camera_right>
+                custom bool inputs:enabled = 0
+            }
+
+            over "left_camera_frame_id"
+            {
+                uniform float2 ui:nodegraph:node:pos = (-540.81226, 534.1461)
+            }
+
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter2/front_stereo_camera/left_rgb"
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>
+                uniform float2 ui:nodegraph:node:pos = (-547.9895, 809.161)
+            }
+
+            over "isaac_read_simulation_time"
+            {
+                uniform float2 ui:nodegraph:node:pos = (-550.4233, 1062.2844)
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter2/front_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter2"
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter2/front_stereo_camera"
+            }
+        }
+
+        over "right_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter2/right_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter2/right_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter2"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter2/right_stereo_camera"
+            }
+        }
+
+        over "left_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter2/left_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter2/left_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter2"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter2/left_stereo_camera"
+            }
+        }
+
+        over "back_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter2/rear_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter2/rear_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter2"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter2/back_stereo_camera"
+            }
+        }
+
+        over "ros_lidars"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter2"
+            }
+
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 1
+                custom bool inputs:fullScan
+            }
+
+            over "publish_back_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "publish_front_3d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 1
+            }
+
+            over "back_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
+            }
+
+            over "front_3d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "transform_tree_odometry"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter2"
+            }
+
+            over "isaac_compute_odometry_node"
+            {
+                custom rel inputs:chassisPrim = </World/Nova_Carter_ROS_2/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_chassis"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_2/chassis_link/base_link>
+                custom rel inputs:targetPrims = </World/Nova_Carter_ROS_2/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_sensors"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_2/chassis_link/base_link>
+                custom rel inputs:targetPrims = [
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/XT_32/PandarXT_32_10hz>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/left>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/right>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_owl>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_owl/camera>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_owl>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_owl/camera>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_owl>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_owl/camera>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_owl>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_owl/camera>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/chassis_imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_2/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>,
+                ]
+            }
+        }
+
+        over "front_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter2/front_fisheye_camera/left"
+            }
+        }
+
+        over "back_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/back_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter2/back_fisheye_camera/left"
+            }
+        }
+
+        over "left_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/left_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter2/left_fisheye_camera/left"
+            }
+        }
+
+        over "right_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter2/right_fisheye_camera/left"
+            }
+        }
+
+        over "chassis_imu"
+        {
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/chassis_imu/Imu_Sensor>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter2"
+            }
+        }
+
+        over "chassis_link"
+        {
+            over "sensors"
+            {
+                over "back_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "front_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "left_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "right_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "chassis_imu"
+                {
+                    over "Imu_Sensor"
+                    {
+                        custom string isaac:nameOverride (
+                            displayName = "Name Override"
+                            doc = "Name override for prim lookup in base name search"
+                        )
+                    }
+                }
+            }
+        }
+
+        over "caster_frame_base"
+        {
+        }
+
+        over "caster_swivel_left"
+        {
+        }
+
+        over "caster_wheel_left"
+        {
+        }
+
+        over "caster_swivel_right"
+        {
+        }
+
+        over "caster_wheel_right"
+        {
+        }
+
+        over "wheel_left"
+        {
+        }
+
+        over "wheel_right"
+        {
+        }
+
+        over "dummy_link"
+        {
+        }
+
+        over "dummy_link_2"
+        {
+        }
+
+        over "joint_caster_base"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        def Lidar "Lidar"
+        {
+            bool drawLines = 0
+            bool drawPoints = 0
+            bool enabled = 0
+            bool enableSemantics = 0
+            bool highLod = 0
+            float horizontalFov = 360
+            float horizontalResolution = 0.4
+            float maxRange = 100
+            float minRange = 0.4
+            float rotationRate = 20
+            float verticalFov = 30
+            float verticalResolution = 4
+            token visibility = "inherited"
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            float yawOffset = 0
+        }
+    }
+
+    def "Nova_Carter_ROS_3" (
+        prepend payload = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Samples/ROS2/Robots/Nova_Carter_ROS.usd@
+    )
+    {
+        quatf xformOp:orient = (6.123234e-17, 0, 0, 1)
+        double3 xformOp:translate = (7, 3, 0)
+
+        over "differential_drive"
+        {
+            over "joint_name_array"
+            {
+                custom token inputs:input0
+                delete token inputs:input0.connect = </World/Nova_Carter_ROS_3/differential_drive/joint_wheel_left_name.inputs:value>
+                prepend token inputs:input0.connect = </World/Nova_Carter_ROS_3/differential_drive/joint_wheel_left_name.inputs:value>
+                custom token inputs:input1
+                delete token inputs:input1.connect = </World/Nova_Carter_ROS_3/differential_drive/joint_wheel_right_name.inputs:value>
+                prepend token inputs:input1.connect = </World/Nova_Carter_ROS_3/differential_drive/joint_wheel_right_name.inputs:value>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter3"
+            }
+
+            over "articulation_controller"
+            {
+                custom rel inputs:targetPrim = </World/Nova_Carter_ROS_3/chassis_link>
+            }
+        }
+
+        over "front_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/left/camera_left>
+                custom bool inputs:enabled = 1
+                custom uint inputs:height = 300
+                custom uint inputs:width = 400
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/right/camera_right>
+                custom bool inputs:enabled = 0
+            }
+
+            over "left_camera_frame_id"
+            {
+                uniform float2 ui:nodegraph:node:pos = (-540.81226, 534.1461)
+            }
+
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter3/front_stereo_camera/left_rgb"
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>
+                uniform float2 ui:nodegraph:node:pos = (-547.9895, 809.161)
+            }
+
+            over "isaac_read_simulation_time"
+            {
+                uniform float2 ui:nodegraph:node:pos = (-550.4233, 1062.2844)
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter3/front_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter3"
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter3/front_stereo_camera"
+            }
+        }
+
+        over "right_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter3/right_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter3/right_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter3"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter3/right_stereo_camera"
+            }
+        }
+
+        over "left_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter3/left_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter3/left_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter3"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter3/left_stereo_camera"
+            }
+        }
+
+        over "back_hawk"
+        {
+            over "left_camera_namespace"
+            {
+                custom string inputs:value = "carter3/rear_stereo_camera/left_rgb"
+            }
+
+            over "right_camera_namespace"
+            {
+                custom string inputs:value = "carter3/rear_stereo_camera/right_rgb"
+            }
+
+            over "ros2_publish_imu"
+            {
+                custom string inputs:nodeNamespace = "carter3"
+            }
+
+            over "left_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/left/camera_left>
+            }
+
+            over "right_camera_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/right/camera_right>
+            }
+
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>
+            }
+
+            over "camera_namespace"
+            {
+                custom string inputs:value = "/carter3/back_stereo_camera"
+            }
+        }
+
+        over "ros_lidars"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter3"
+            }
+
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 1
+                custom bool inputs:fullScan
+            }
+
+            over "publish_back_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "publish_front_3d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom bool inputs:fullScan
+            }
+
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 1
+            }
+
+            over "back_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
+            }
+
+            over "front_3d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "transform_tree_odometry"
+        {
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter3"
+            }
+
+            over "isaac_compute_odometry_node"
+            {
+                custom rel inputs:chassisPrim = </World/Nova_Carter_ROS_3/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_chassis"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_3/chassis_link/base_link>
+                custom rel inputs:targetPrims = </World/Nova_Carter_ROS_3/chassis_link>
+            }
+
+            over "tf_tree_base_link_to_sensors"
+            {
+                custom rel inputs:parentPrim = </World/Nova_Carter_ROS_3/chassis_link/base_link>
+                custom rel inputs:targetPrims = [
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/right/camera_right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/left/camera_left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/rear_RPLidar/RPLidar_S2E>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/XT_32/PandarXT_32_10hz>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/left>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/right>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_owl>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_owl/camera>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_owl>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_owl/camera>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_owl>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_owl/camera>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_owl>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_owl/camera>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/chassis_imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/left_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/right_hawk/Imu/Imu_Sensor>,
+                    </World/Nova_Carter_ROS_3/chassis_link/sensors/back_hawk/Imu/Imu_Sensor>,
+                ]
+            }
+        }
+
+        over "front_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter3/front_fisheye_camera/left"
+            }
+        }
+
+        over "back_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/back_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter3/back_fisheye_camera/left"
+            }
+        }
+
+        over "left_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/left_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter3/left_fisheye_camera/left"
+            }
+        }
+
+        over "right_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_owl/camera>
+            }
+
+            over "namespace"
+            {
+                custom string inputs:value = "/carter3/right_fisheye_camera/left"
+            }
+        }
+
+        over "chassis_imu"
+        {
+            over "isaac_read_imu_node"
+            {
+                custom rel inputs:imuPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/chassis_imu/Imu_Sensor>
+            }
+
+            over "node_namespace"
+            {
+                custom string inputs:value = "carter3"
+            }
+        }
+
+        over "chassis_link"
+        {
+            over "sensors"
+            {
+                over "chassis_imu"
+                {
+                    over "Imu_Sensor"
+                    {
+                        custom string isaac:nameOverride (
+                            displayName = "Name Override"
+                            doc = "Name override for prim lookup in base name search"
+                        )
+                    }
+                }
+
+                over "front_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "left_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "right_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+
+                over "back_hawk"
+                {
+                    over "Imu"
+                    {
+                        over "Imu_Sensor"
+                        {
+                            custom string isaac:nameOverride (
+                                displayName = "Name Override"
+                                doc = "Name override for prim lookup in base name search"
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        over "caster_frame_base"
+        {
+        }
+
+        over "caster_swivel_left"
+        {
+        }
+
+        over "caster_wheel_left"
+        {
+        }
+
+        over "caster_swivel_right"
+        {
+        }
+
+        over "caster_wheel_right"
+        {
+        }
+
+        over "wheel_left"
+        {
+        }
+
+        over "wheel_right"
+        {
+        }
+
+        over "dummy_link"
+        {
+        }
+
+        over "dummy_link_2"
+        {
+        }
+
+        over "joint_caster_base"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_wheel_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_swing_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_left"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        over "joint_caster_right"
+        {
+            float state:angular:physics:position = 0
+            float state:angular:physics:velocity = 0
+        }
+
+        def Lidar "Lidar"
+        {
+            bool drawLines = 0
+            bool drawPoints = 0
+            bool enabled = 0
+            bool enableSemantics = 0
+            bool highLod = 0
+            float horizontalFov = 360
+            float horizontalResolution = 0.4
+            float maxRange = 100
+            float minRange = 0.4
+            float rotationRate = 20
+            float verticalFov = 30
+            float verticalResolution = 4
+            token visibility = "inherited"
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            float yawOffset = 0
+        }
+    }
+}
+
+def "Render" (
+    hide_in_stage_window = true
+    no_delete = true
+)
+{
+    def "OmniverseKit"
+    {
+        def "HydraTextures" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            over "Replicator_02"
+            {
+                over "PostRender"
+                {
+                    over "SDGPipeline"
+                    {
+                        custom uint64 graph:variable:__computeParams (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__computeParams"
+                        )
+                        custom uint64 graph:variable:__cudaInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaInteropState"
+                        )
+                        custom uint64 graph:variable:__cudaStream (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaStream"
+                        )
+                        custom uint64 graph:variable:__rpInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__rpInteropState"
+                        )
+                    }
+                }
+            }
+
+            over "Replicator_01"
+            {
+                over "PostRender"
+                {
+                    over "SDGPipeline"
+                    {
+                        custom uint64 graph:variable:__computeParams (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__computeParams"
+                        )
+                        custom uint64 graph:variable:__cudaInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaInteropState"
+                        )
+                        custom uint64 graph:variable:__cudaStream (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaStream"
+                        )
+                        custom uint64 graph:variable:__rpInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__rpInteropState"
+                        )
+                    }
+                }
+            }
+
+            over "Replicator"
+            {
+                over "PostRender"
+                {
+                    over "SDGPipeline"
+                    {
+                        custom uint64 graph:variable:__computeParams (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__computeParams"
+                        )
+                        custom uint64 graph:variable:__cudaInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaInteropState"
+                        )
+                        custom uint64 graph:variable:__cudaStream (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__cudaStream"
+                        )
+                        custom uint64 graph:variable:__rpInteropState (
+                            customData = {
+                                token scope = "private"
+                            }
+                            displayName = "__rpInteropState"
+                        )
+                    }
+                }
+            }
+
+            def RenderProduct "omni_kit_widget_viewport_ViewportTexture_0" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/hospital/Camera>
+                token omni:rtx:background:source:texture:textureMode = "repeatMirrored"
+                token omni:rtx:background:source:type = "domeLight"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:nonVisualMaterialCSV:enabled = 0
+                string omni:rtx:material:db:rtSensorNameToIdMap = "DefaultMaterial:0;AsphaltStandardMaterial:1;AsphaltWeatheredMaterial:2;VegetationGrassMaterial:3;WaterStandardMaterial:4;GlassStandardMaterial:5;FiberGlassMaterial:6;MetalAlloyMaterial:7;MetalAluminumMaterial:8;MetalAluminumOxidizedMaterial:9;PlasticStandardMaterial:10;RetroMarkingsMaterial:11;RetroSignMaterial:12;RubberStandardMaterial:13;SoilClayMaterial:14;ConcreteRoughMaterial:15;ConcreteSmoothMaterial:16;OakTreeBarkMaterial:17;FabricStandardMaterial:18;PlexiGlassStandardMaterial:19;MetalSilverMaterial:20"
+                bool omni:rtx:material:db:syncLoads = 1
+                token omni:rtx:post:dlss:execMode = "performance"
+                bool omni:rtx:post:registeredCompositing:invertColorCorrection = 1
+                bool omni:rtx:post:registeredCompositing:invertToneMap = 1
+                bool omni:rtx:pt:lightcache:cached:dontResolveConflicts = 1
+                int omni:rtx:pt:maxSamplesPerLaunch = 2073600
+                int omni:rtx:pt:mgpu:maxPixelsPerRegionExponent = 12
+                color3f omni:rtx:rt:ambientLight:color = (0.1, 0.1, 0.1)
+                bool omni:rtx:rt:demoire = 0
+                bool omni:rtx:rt:ecoMode:enabled
+                bool omni:rtx:rt:lightcache:spatialCache:dontResolveConflicts = 1
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                bool omni:rtx:scene:hydra:mdlMaterialWarmup = 1
+                uint omni:rtx:viewTile:limit = 4294967295
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (512, 512)
+            }
+
+            def RenderProduct "Replicator_03" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_3/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (1280, 720)
+            }
+
+            def RenderProduct "Replicator_04" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_1/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (1280, 720)
+            }
+
+            def RenderProduct "Replicator_05" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_2/chassis_link/sensors/XT_32/PandarXT_32_10hz>
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (1280, 720)
+            }
+
+            def RenderProduct "Replicator_06" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/left/camera_left>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_06/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/LdrColorSD>,
+                    </Render/Vars/LdrColor>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_07" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/left/camera_left>
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_08" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/left/camera_left>
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = </Render/Vars/LdrColor>
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+        }
+    }
+
+    def RenderSettings "OmniverseGlobalRenderSettings" (
+        prepend apiSchemas = ["OmniRtxSettingsGlobalRtAdvancedAPI_1", "OmniRtxSettingsGlobalPtAdvancedAPI_1"]
+        no_delete = true
+    )
+    {
+        rel products = [
+            </Render/OmniverseKit/HydraTextures/omni_kit_widget_viewport_ViewportTexture_0>,
+            </Render/OmniverseKit/HydraTextures/Replicator_03>,
+            </Render/OmniverseKit/HydraTextures/Replicator_04>,
+            </Render/OmniverseKit/HydraTextures/Replicator_05>,
+            </Render/OmniverseKit/HydraTextures/Replicator_06>,
+            </Render/OmniverseKit/HydraTextures/Replicator_07>,
+            </Render/OmniverseKit/HydraTextures/Replicator_08>,
+        ]
+    }
+
+    def "Vars"
+    {
+        def RenderVar "LdrColor" (
+            hide_in_stage_window = true
+            no_delete = true
+        )
+        {
+            uniform string sourceName = "LdrColor"
+        }
+    }
+}

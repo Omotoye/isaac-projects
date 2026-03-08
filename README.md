@@ -33,6 +33,7 @@ ROS2-first Isaac Sim 5.1 project for fast warehouse simulation, benchmarking, an
 - `hospital_experiment.usda` - hospital experiment scene.
 - `hospital_experiment_exp1a.usda` - hospital exp1a (all robots front scan on, only robot1 camera at 300x200).
 - `hospital_experiment_exp1b.usda` - hospital exp1b (no scans, only robot1 camera at 300x200).
+- `hospital_experiment_rtx3_400x300.usda` - hospital RTX profile (3 front 2D lidar + 3 front cameras at 400x300).
 - `.gitignore` - Git-safe defaults for Python/ROS/Isaac local artifacts.
 - `LICENSE` - MIT license.
 - `CONTRIBUTING.md` - lightweight contribution guide.
@@ -296,6 +297,50 @@ cd ~/isaac-sim
   --aa-mode 3 \
   --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment_exp1b.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
+```
+
+### Hospital RTX (3x Lidar + 3x Camera 400x300)
+
+- 3 robots
+- RTX front 2D lidar enabled on each robot
+- One front camera per robot at `400x300`
+- PhysX LaserScan auto-swap disabled
+- DLSS Performance enabled
+
+Local PC:
+
+```bash
+cd ~/isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
+  --disable-physx-laserscan \
+  --usd-path ~/isaac-projects/hospital_experiment_rtx3_400x300.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
+```
+
+Cloud:
+
+```bash
+cd /isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
+  --disable-physx-laserscan \
+  --usd-path ~/isaac-projects/hospital_experiment_rtx3_400x300.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
   --target-sim-hz 60 \
