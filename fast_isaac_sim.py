@@ -1706,6 +1706,28 @@ def main() -> None:
         else:
             open_usd = args.usd_path
 
+    # Hospital family scenes: default to DLSS Performance unless user explicitly set AA/DLSS flags.
+    usd_name = os.path.basename(open_usd or args.usd_path or "").lower()
+    is_hospital_family_requested = "hospital_experiment" in usd_name
+    aa_mode_explicit = any(
+        token == "--aa-mode" or token.startswith("--aa-mode=")
+        for token in sys.argv[1:]
+    )
+    dlss_mode_explicit = any(
+        token == "--dlss-exec-mode" or token.startswith("--dlss-exec-mode=")
+        for token in sys.argv[1:]
+    )
+    if is_hospital_family_requested:
+        if not aa_mode_explicit:
+            args.aa_mode = 3
+        if not dlss_mode_explicit:
+            args.dlss_exec_mode = 0
+        print(
+            "[fast_isaac_sim] Hospital render profile:"
+            f" aa_mode={args.aa_mode}, dlss_exec_mode={args.dlss_exec_mode}"
+            " (defaulting to DLSS Performance unless explicitly overridden)."
+        )
+
     # Build experience selection
     experience = args.experience
     exp_path = os.environ.get("EXP_PATH", "")

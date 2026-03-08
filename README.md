@@ -191,6 +191,9 @@ cd ~/isaac-sim
 - Uses authored namespaces: `/carter1`, `/carter2`, `/carter3`
 - Do not pass `--ros-namespace` for this scene
 
+> [!TIP]
+> Hospital scenes use DLSS Performance (`--aa-mode 3 --dlss-exec-mode 0`) by default in the launcher unless you explicitly override these flags.
+
 ```bash
 cd ~/isaac-sim
 export ROS_DOMAIN_ID=5
@@ -199,6 +202,8 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -248,6 +253,8 @@ cd ~/isaac-sim
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment_exp1a.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -263,6 +270,8 @@ cd /isaac-sim
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment_exp1a.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -284,6 +293,8 @@ cd ~/isaac-sim
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment_exp1b.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -299,6 +310,8 @@ cd /isaac-sim
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment_exp1b.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -320,6 +333,8 @@ Example profile runs:
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --robot-profile sensors-off \
   --target-sim-hz 60 \
@@ -332,6 +347,8 @@ Example profile runs:
   --headless \
   --render-headless \
   --render-every 2 \
+  --aa-mode 3 \
+  --dlss-exec-mode 0 \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --robot-profile single-front-camera \
   --profile-camera-width 320 \
