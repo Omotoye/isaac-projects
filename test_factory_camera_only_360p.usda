@@ -1,0 +1,269 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @./test_factory.usda@
+    ]
+)
+
+over "World"
+{
+    over "warehouse_extras" (
+        active = false
+    )
+    {
+    }
+
+    over "ROS_Clock" (
+        active = true
+    )
+    {
+    }
+
+    over "Nova_Carter_ROS"
+    {
+        over "front_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom bool inputs:enabled = 1
+                custom uint inputs:height = 360
+                custom uint inputs:width = 640
+            }
+            over "right_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "left_camera_publish_image"
+            {
+                custom bool inputs:enabled = 1
+                custom uint inputs:frameSkipCount = 0
+                custom string inputs:topicName = "front_left/image_raw"
+            }
+            over "right_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "right_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "left_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "left_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "left_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "back_hawk"
+        {
+            over "left_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "left_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "right_camera_publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "front_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "back_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "left_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "right_owl"
+        {
+            over "isaac_create_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_image"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "ros2_camera_info_helper"
+            {
+                custom bool inputs:enabled = 0
+            }
+        }
+
+        over "ros_lidars"
+        {
+            over "front_2d_lidar_render_product"
+            {
+                custom bool inputs:enabled = 0
+                custom uint inputs:height = 8
+                custom uint inputs:width = 256
+            }
+            over "back_2d_lidar_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "front_3d_lidar_render_product"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom uint inputs:frameSkipCount = 2
+                custom string inputs:topicName = "scan"
+                custom token inputs:type = "laser_scan"
+            }
+            over "publish_back_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+            }
+            over "publish_front_3d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
+                custom token inputs:type = "point_cloud"
+                custom string inputs:topicName = "front_3d_lidar/lidar_points"
+            }
+        }
+    }
+}
+
+over "Render"
+{
+    over "OmniverseKit"
+    {
+        over "HydraTextures"
+        {
+            over "omni_kit_widget_viewport_ViewportTexture_0" (
+                active = false
+            )
+            {
+            }
+            over "Replicator" (
+                active = false
+            )
+            {
+            }
+            over "Replicator_01" (
+                active = false
+            )
+            {
+            }
+            over "Replicator_02" (
+                active = false
+            )
+            {
+            }
+            over "Replicator_03" (
+                active = false
+            )
+            {
+            }
+            over "Replicator_04" (
+                active = false
+            )
+            {
+            }
+            over "Replicator_05" (
+                active = false
+            )
+            {
+            }
+        }
+    }
+}

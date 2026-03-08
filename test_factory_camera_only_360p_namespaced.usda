@@ -1,0 +1,8 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @./test_factory_camera_only_360p.usda@
+    ]
+)
+
