@@ -35,7 +35,7 @@
             bool excludeRigidBodies = 1
         }
         dictionary omni_layer = {
-            string authoring_layer = "./multiple_robot_carter_hospital_navigation.usd"
+            string authoring_layer = "./hospital_experiment_rtx3_400x300.usda"
             dictionary locked = {
             }
             dictionary muteness = {
@@ -114,10 +114,10 @@ def Xform "World"
         over "Camera"
         {
             bool omni:kit:cameraLock = 0
-            custom vector3d omni:kit:centerOfInterest = (0, 0, -5.616726299989845)
-            quatd xformOp:orient = (0.6560438367706504, 0.48941113559923966, 0.3435382877568383, 0.4605047984894478)
+            custom vector3d omni:kit:centerOfInterest = (0, 0, -6.555996036865043)
+            quatd xformOp:orient = (0.6560438367706504, 0.48941113559923966, 0.3435382877568382, 0.4605047984894477)
             double3 xformOp:scale = (1, 1, 1)
-            double3 xformOp:translate = (9.804196256833231, -1.8495977656925509, 1.743977177273435)
+            double3 xformOp:translate = (11.248706082693905, -0.026891133212972568, 2.5539722028960887)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
         }
 
@@ -434,6 +434,8 @@ def Xform "World"
             {
                 custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
                 custom bool inputs:enabled = 1
+                custom uint inputs:height = 300
+                custom uint inputs:width = 400
             }
 
             over "back_2d_lidar_render_product"
@@ -578,6 +580,11 @@ def Xform "World"
 
         over "chassis_link"
         {
+            custom string isaac:nameOverride (
+                displayName = "Name Override"
+                doc = "Name override for prim lookup in base name search"
+            )
+
             over "sensors"
             {
                 over "front_hawk"
@@ -646,6 +653,25 @@ def Xform "World"
                         }
                     }
                 }
+            }
+
+            def RectLight "RectLight" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0), (0.5, 0.5, 0)]
+                float inputs:height = 1
+                float inputs:intensity = 15000
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                float inputs:width = 1
+                quatd xformOp:orient = (0.4998835674513015, -0.5001164054419335, -0.5001164054419334, 0.49988356745130125)
+                double3 xformOp:scale = (1, 1, 5)
+                double3 xformOp:translate = (0.5081062674259806, -0.09119716709576871, 0.5708356518503126)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
             }
         }
 
@@ -725,28 +751,6 @@ def Xform "World"
         {
             float state:angular:physics:position = 0
             float state:angular:physics:velocity = 0
-        }
-
-        def Lidar "Lidar"
-        {
-            bool drawLines = 0
-            bool drawPoints = 0
-            bool enabled = 0
-            bool enableSemantics = 0
-            bool highLod = 0
-            float horizontalFov = 360
-            float horizontalResolution = 0.4
-            float maxRange = 100
-            float minRange = 0.4
-            float rotationRate = 20
-            float verticalFov = 30
-            float verticalResolution = 4
-            token visibility = "inherited"
-            quatd xformOp:orient = (1, 0, 0, 0)
-            double3 xformOp:scale = (1, 1, 1)
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-            float yawOffset = 0
         }
     }
 
@@ -976,6 +980,8 @@ def Xform "World"
             {
                 custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
                 custom bool inputs:enabled = 1
+                custom uint inputs:height = 480
+                custom uint inputs:width = 640
             }
 
             over "back_2d_lidar_render_product"
@@ -1189,6 +1195,25 @@ def Xform "World"
                     }
                 }
             }
+
+            def RectLight "RectLight" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0), (0.5, 0.5, 0)]
+                float inputs:height = 1
+                float inputs:intensity = 15000
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                float inputs:width = 1
+                quatd xformOp:orient = (0.6955152015567403, 0.02735675825360414, -0.7175245041378785, 0.025861131897741578)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.29046576957022463, 0.02219040116773341, 0.5547046493939272)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
         }
 
         over "caster_frame_base"
@@ -1267,28 +1292,6 @@ def Xform "World"
         {
             float state:angular:physics:position = 0
             float state:angular:physics:velocity = 0
-        }
-
-        def Lidar "Lidar"
-        {
-            bool drawLines = 0
-            bool drawPoints = 0
-            bool enabled = 0
-            bool enableSemantics = 0
-            bool highLod = 0
-            float horizontalFov = 360
-            float horizontalResolution = 0.4
-            float maxRange = 100
-            float minRange = 0.4
-            float rotationRate = 20
-            float verticalFov = 30
-            float verticalResolution = 4
-            token visibility = "inherited"
-            quatd xformOp:orient = (1, 0, 0, 0)
-            double3 xformOp:scale = (1, 1, 1)
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-            float yawOffset = 0
         }
     }
 
@@ -1518,6 +1521,8 @@ def Xform "World"
             {
                 custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
                 custom bool inputs:enabled = 1
+                custom uint inputs:height = 480
+                custom uint inputs:width = 640
             }
 
             over "back_2d_lidar_render_product"
@@ -1731,6 +1736,25 @@ def Xform "World"
                     }
                 }
             }
+
+            def RectLight "RectLight" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0), (0.5, 0.5, 0)]
+                float inputs:height = 1
+                float inputs:intensity = 15000
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                float inputs:width = 1
+                quatd xformOp:orient = (0.7049628410084208, 4.684458226860831e-17, -0.7092442405810118, 1.0254419733808701e-16)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.1612863680015053, 0, 0.5442581725773553)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
         }
 
         over "caster_frame_base"
@@ -1809,28 +1833,6 @@ def Xform "World"
         {
             float state:angular:physics:position = 0
             float state:angular:physics:velocity = 0
-        }
-
-        def Lidar "Lidar"
-        {
-            bool drawLines = 0
-            bool drawPoints = 0
-            bool enabled = 0
-            bool enableSemantics = 0
-            bool highLod = 0
-            float horizontalFov = 360
-            float horizontalResolution = 0.4
-            float maxRange = 100
-            float minRange = 0.4
-            float rotationRate = 20
-            float verticalFov = 30
-            float verticalResolution = 4
-            token visibility = "inherited"
-            quatd xformOp:orient = (1, 0, 0, 0)
-            double3 xformOp:scale = (1, 1, 1)
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-            float yawOffset = 0
         }
     }
 }
@@ -2106,3 +2108,4 @@ def "Render" (
         }
     }
 }
+
