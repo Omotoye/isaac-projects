@@ -412,7 +412,9 @@ def Xform "World"
                 custom string inputs:value = "carter1"
             }
 
-            
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
                 custom bool inputs:fullScan
             }
 
@@ -428,7 +430,10 @@ def Xform "World"
                 custom bool inputs:fullScan
             }
 
-            
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
             }
 
             over "back_2d_lidar_render_product"
@@ -949,7 +954,9 @@ def Xform "World"
                 custom string inputs:value = "carter2"
             }
 
-            
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
                 custom bool inputs:fullScan
             }
 
@@ -965,7 +972,10 @@ def Xform "World"
                 custom bool inputs:fullScan
             }
 
-            
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
             }
 
             over "back_2d_lidar_render_product"
@@ -1486,7 +1496,9 @@ def Xform "World"
                 custom string inputs:value = "carter3"
             }
 
-            
+            over "publish_front_2d_lidar_scan"
+            {
+                custom bool inputs:enabled = 0
                 custom bool inputs:fullScan
             }
 
@@ -1502,7 +1514,10 @@ def Xform "World"
                 custom bool inputs:fullScan
             }
 
-            
+            over "front_2d_lidar_render_product"
+            {
+                custom rel inputs:cameraPrim = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom bool inputs:enabled = 0
             }
 
             over "back_2d_lidar_render_product"
