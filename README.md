@@ -31,6 +31,8 @@ ROS2-first Isaac Sim 5.1 project for fast warehouse simulation, benchmarking, an
 - `test_factory_camera_only_360p.usda` - one 360p camera, no scan/pointcloud.
 - `test_factory_camera_only_360p_namespaced.usda` - 360p camera profile intended for launcher-side ROS namespace/frame prefixing.
 - `hospital_experiment.usda` - hospital experiment scene.
+- `hospital_experiment_exp1a.usda` - hospital exp1a (all robots front scan on, only robot1 camera at 300x200).
+- `hospital_experiment_exp1b.usda` - hospital exp1b (no scans, only robot1 camera at 300x200).
 - `.gitignore` - Git-safe defaults for Python/ROS/Isaac local artifacts.
 - `LICENSE` - MIT license.
 - `CONTRIBUTING.md` - lightweight contribution guide.
@@ -230,6 +232,78 @@ ros2 topic echo /carter3/chassis/odom --once
 ros2 topic list | rg '^/carter(1|2|3)/(front|back)_2d_lidar/scan'
 ros2 topic hz /carter1/front_2d_lidar/scan
 ros2 topic echo /carter1/front_2d_lidar/scan --once | rg 'frame_id|scan_time'
+```
+
+### Hospital Exp 1A (Cloud/Local Profile)
+
+- 3 robots
+- Front 2D LaserScan enabled on all robots
+- Only `carter1` camera enabled at `300x200`
+
+Local PC:
+
+```bash
+cd ~/isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --usd-path ~/isaac-projects/hospital_experiment_exp1a.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
+```
+
+Cloud:
+
+```bash
+cd /isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --usd-path ~/isaac-projects/hospital_experiment_exp1a.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
+```
+
+### Hospital Exp 1B (Cloud/Local Profile)
+
+- 3 robots
+- No LaserScan publishers
+- Only `carter1` camera enabled at `300x200`
+
+Local PC:
+
+```bash
+cd ~/isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --usd-path ~/isaac-projects/hospital_experiment_exp1b.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
+```
+
+Cloud:
+
+```bash
+cd /isaac-sim
+./python.sh ~/isaac-projects/fast_isaac_sim.py \
+  --headless \
+  --render-headless \
+  --render-every 2 \
+  --usd-path ~/isaac-projects/hospital_experiment_exp1b.usda \
+  --no-ground-plane \
+  --physics-step 0.0166667 \
+  --target-sim-hz 60 \
+  --max-steps -1
 ```
 
 ### Future Robot Feature Profiles (Hybrid)
