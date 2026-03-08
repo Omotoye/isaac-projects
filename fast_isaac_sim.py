@@ -1936,13 +1936,13 @@ def main() -> None:
         world.scene.add_default_ground_plane()
 
     if stage and is_hospital_scene:
-        # Cloud profile: run all robot cameras at 1280x720.
-        hospital_cam_stats = _override_hospital_camera_resolution(stage, width=1280, height=720)
+        # Cloud profile: run all robot cameras at 640x480.
+        hospital_cam_stats = _override_hospital_camera_resolution(stage, width=640, height=480)
         print(
             "[fast_isaac_sim] Hospital camera override (pre-reset):"
             f" camera_nodes_seen={hospital_cam_stats['camera_nodes_seen']},"
             f" camera_size_updates={hospital_cam_stats['camera_size_updates']},"
-            " size=1280x720"
+            " size=640x480"
         )
 
     if stage and args.robot_profile != "scene-default":
@@ -2081,12 +2081,12 @@ def main() -> None:
         )
 
     if post_stage and is_hospital_scene:
-        hospital_cam_post_stats = _override_hospital_camera_resolution(post_stage, width=1280, height=720)
+        hospital_cam_post_stats = _override_hospital_camera_resolution(post_stage, width=640, height=480)
         print(
             "[fast_isaac_sim] Hospital camera override (post-reset):"
             f" camera_nodes_seen={hospital_cam_post_stats['camera_nodes_seen']},"
             f" camera_size_updates={hospital_cam_post_stats['camera_size_updates']},"
-            " size=1280x720"
+            " size=640x480"
         )
 
     # Some ROS2 nodes can appear only after world reset; apply namespace normalization again.

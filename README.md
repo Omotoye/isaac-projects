@@ -197,7 +197,6 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
   --headless \
   --render-headless \
   --render-every 2 \
-  --optimize-render \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --no-ground-plane \
   --physics-step 0.0166667 \
@@ -215,7 +214,7 @@ export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 > The launcher readiness probe uses `ros2 topic echo --once` in a sanitized ROS shell and auto-sources `/opt/ros/$ROS_DISTRO/setup.bash` when available.
 
 > [!TIP]
-> Hospital cloud profile uses authored RTX sensors: all 3 robots publish front/back 2D lidar scans and front camera at `1280x720`.
+> Hospital cloud profile uses authored RTX sensors: all 3 robots publish front/back 2D lidar scans and front camera at `640x480`.
 
 ```bash
 # second terminal
@@ -247,7 +246,6 @@ Example profile runs:
   --headless \
   --render-headless \
   --render-every 2 \
-  --optimize-render \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --robot-profile sensors-off \
   --target-sim-hz 60 \
@@ -260,7 +258,6 @@ Example profile runs:
   --headless \
   --render-headless \
   --render-every 2 \
-  --optimize-render \
   --usd-path ~/isaac-projects/hospital_experiment.usda \
   --robot-profile single-front-camera \
   --profile-camera-width 320 \
