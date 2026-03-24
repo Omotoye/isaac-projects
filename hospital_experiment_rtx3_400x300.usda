@@ -114,10 +114,10 @@ def Xform "World"
         over "Camera"
         {
             bool omni:kit:cameraLock = 0
-            custom vector3d omni:kit:centerOfInterest = (0, 0, -6.555996036865043)
-            quatd xformOp:orient = (0.6560438367706504, 0.48941113559923966, 0.3435382877568382, 0.4605047984894477)
+            custom vector3d omni:kit:centerOfInterest = (0, 0, -11.686584492045348)
+            quatd xformOp:orient = (0.48923925509131516, 0.4037930269162543, 0.49207538406031165, 0.5962029512619014)
             double3 xformOp:scale = (1, 1, 1)
-            double3 xformOp:translate = (11.248706082693905, -0.026891133212972568, 2.5539722028960887)
+            double3 xformOp:translate = (7.995115231474384, 1.3297163520283173, 1.6255028050312927)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
         }
 
@@ -1979,7 +1979,7 @@ def "Render" (
                 uint omni:rtx:viewTile:limit = 4294967295
                 rel orderedVars = </Render/Vars/LdrColor>
                 custom bool overrideClipRange = 0
-                uniform int2 resolution = (512, 512)
+                uniform int2 resolution = (2048, 1080)
             }
 
             def RenderProduct "Replicator_03" (
@@ -2078,6 +2078,126 @@ def "Render" (
                 custom bool overrideClipRange = 0
                 uniform int2 resolution = (400, 300)
             }
+
+            def RenderProduct "Replicator_09" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_hawk/left/camera_left>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_09/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/LdrColorSD>,
+                    </Render/Vars/LdrColor>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_10" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_hawk/left/camera_left>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_10/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/LdrColorSD>,
+                    </Render/Vars/LdrColor>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_11" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_11/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/GenericModelOutput>,
+                    </Render/Vars/RtxSensorMetadata>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_12" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_1/chassis_link/sensors/front_hawk/left/camera_left>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_12/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/LdrColorSD>,
+                    </Render/Vars/LdrColor>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (400, 300)
+            }
+
+            def RenderProduct "Replicator_13" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_2/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_13/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/GenericModelOutput>,
+                    </Render/Vars/RtxSensorMetadata>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (640, 480)
+            }
+
+            def RenderProduct "Replicator_14" (
+                prepend apiSchemas = ["OmniRtxSettingsCommonAdvancedAPI_1", "OmniRtxSettingsRtAdvancedAPI_1", "OmniRtxSettingsPtAdvancedAPI_1", "OmniRtxPostColorGradingAPI_1", "OmniRtxPostChromaticAberrationAPI_1", "OmniRtxPostBloomPhysicalAPI_1", "OmniRtxPostMatteObjectAPI_1", "OmniRtxPostCompositingAPI_1", "OmniRtxPostDofAPI_1", "OmniRtxPostMotionBlurAPI_1", "OmniRtxPostTvNoiseAPI_1", "OmniRtxPostTonemapIrayReinhardAPI_1", "OmniRtxPostDebugSettingsAPI_1", "OmniRtxDebugSettingsAPI_1"]
+                hide_in_stage_window = true
+                no_delete = true
+            )
+            {
+                rel camera = </World/Nova_Carter_ROS_3/chassis_link/sensors/front_RPLidar/RPLidar_S2E>
+                custom string ogPostProcessPath = "/Render/OmniverseKit/HydraTextures/Replicator_14/PostRender"
+                bool omni:rtx:dlss:frameGeneration = 1
+                bool omni:rtx:material:db:syncLoads = 1
+                bool omni:rtx:rt:ecoMode:enabled = 0
+                bool omni:rtx:scene:hydra:materialSyncLoads = 1
+                rel orderedVars = [
+                    </Render/Vars/GenericModelOutput>,
+                    </Render/Vars/RtxSensorMetadata>,
+                ]
+                custom bool overrideClipRange = 0
+                uniform int2 resolution = (640, 480)
+            }
         }
     }
 
@@ -2094,6 +2214,12 @@ def "Render" (
             </Render/OmniverseKit/HydraTextures/Replicator_06>,
             </Render/OmniverseKit/HydraTextures/Replicator_07>,
             </Render/OmniverseKit/HydraTextures/Replicator_08>,
+            </Render/OmniverseKit/HydraTextures/Replicator_09>,
+            </Render/OmniverseKit/HydraTextures/Replicator_10>,
+            </Render/OmniverseKit/HydraTextures/Replicator_11>,
+            </Render/OmniverseKit/HydraTextures/Replicator_12>,
+            </Render/OmniverseKit/HydraTextures/Replicator_13>,
+            </Render/OmniverseKit/HydraTextures/Replicator_14>,
         ]
     }
 
@@ -2107,5 +2233,438 @@ def "Render" (
             uniform string sourceName = "LdrColor"
         }
     }
+}
+
+def Scope "Looks"
+{
+    def Material "AprilTag_01"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_01/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_01/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_01/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 1
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_02"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_02/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_02/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_02/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 2
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_03"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_03/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_03/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_03/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 3
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_04"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_04/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_04/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_04/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 4
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_05"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_05/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_05/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_05/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 5
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_06"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_06/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_06/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_06/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 6
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_07"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_07/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_07/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_07/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 7
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_08"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_08/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_08/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_08/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 8
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_09"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_09/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_09/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_09/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 9
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+
+    def Material "AprilTag_10"
+    {
+        token outputs:mdl:displacement.connect = </Looks/AprilTag_10/Shader.outputs:out>
+        token outputs:mdl:surface.connect = </Looks/AprilTag_10/Shader.outputs:out>
+        token outputs:mdl:volume.connect = </Looks/AprilTag_10/Shader.outputs:out>
+
+        def Shader "Shader"
+        {
+            uniform token info:implementationSource = "sourceAsset"
+            uniform asset info:mdl:sourceAsset = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/AprilTag.mdl@
+            uniform token info:mdl:sourceAsset:subIdentifier = "AprilTag"
+            int inputs:tag_id = 10
+            custom asset inputs:tag_mosaic = @https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/5.1/Isaac/Materials/AprilTag/Textures/tag36h11.png@
+            token outputs:out (
+                renderType = "material"
+            )
+        }
+    }
+}
+
+def Mesh "Cube_01" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_01> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (-47.780966508350595, 9.253047326267392, 0.5390588048650494)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_02" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_02> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (-47.825433425657415, 31.31671386718752, 0.5325260213106301)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_03" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_03> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (12.045346704726485, 26.44529965786674, 0.5412456866482279)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_04" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_04> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (6.123233995736766e-17, 0, 0, 1)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (26.016314965415788, 20.264474470321122, 0.5320971696497737)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_05" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_05> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (12.68741541247874, 3.5158409870380307, 0.5457641816876574)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_06" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_06> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (0.7071067811865476, 0, 0, 0.7071067811865475)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (22.188201333573637, 2.261410239786365, 0.5213475846469872)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_07" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_07> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (25.0451904296875, -1.961320386525618, 0.5220328481793512)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_08" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_08> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (-14.32625071502537, 14.311163792197549, 0.6505159942022498)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_09" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_09> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (0.7612395229107838, 0, 0, 0.6484708079463272)
+    double3 xformOp:scale = (0.014414373209733435, 0.5000000074505806, 0.5000000074505806)
+    double3 xformOp:translate = (-13.512517256229335, 7.811550875800454, 0.5511879084272279)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+}
+
+def Mesh "Cube_10" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+)
+{
+    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+    int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+    int[] faceVertexIndices = [0, 1, 3, 2, 4, 6, 7, 5, 6, 2, 3, 7, 4, 5, 1, 0, 4, 0, 2, 6, 5, 7, 3, 1]
+    rel material:binding = </Looks/AprilTag_10> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+        interpolation = "faceVarying"
+    )
+    point3f[] points = [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5)]
+    texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0), (0, 1), (0, 0), (1, 0), (1, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (1, 0), (1, 1), (0, 1), (0, 0)] (
+        interpolation = "faceVarying"
+    )
+    uniform token subdivisionScheme = "none"
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (0.014414373209733435, 0.5, 0.5000000074505806)
+    double3 xformOp:translate = (-2.632030628617786, -0.6653609672384561, 0.7186511932485986)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 }
 
