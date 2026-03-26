@@ -259,7 +259,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument(
         "--robot-profile",
         type=str,
-        choices=["scene-default", "sensors-off", "single-front-camera"],
+        choices=[
+            "scene-default",
+            "sensors-off",
+            "single-front-camera",
+            "single-front-camera-rtx-front-laserscan",
+        ],
         default="scene-default",
         help=(
             "Launcher-driven robot feature profile. scene-default keeps authored scene behavior; "
@@ -571,6 +576,14 @@ def _apply_robot_profile(stage, profile: str, camera_width: int, camera_height: 
     if profile == "scene-default":
         return stats
 
+    front_camera_only_profiles = {
+        "single-front-camera",
+        "single-front-camera-rtx-front-laserscan",
+    }
+    rtx_front_laserscan_profiles = {
+        "single-front-camera-rtx-front-laserscan",
+    }
+
     def _set_uint_attr(attr_path: str, value: int) -> bool:
         attr = stage.GetAttributeAtPath(attr_path)
         if not attr:
@@ -592,7 +605,7 @@ def _apply_robot_profile(stage, profile: str, camera_width: int, camera_height: 
             if profile == "sensors-off":
                 if _set_bool_attr(stage, enable_attr, False):
                     stats["camera_enable_updates"] += 1
-            elif profile == "single-front-camera":
+            elif profile in front_camera_only_profiles:
                 desired = "/front_hawk/left_camera_render_product" in path
                 if _set_bool_attr(stage, enable_attr, desired):
                     stats["camera_enable_updates"] += 1
@@ -612,7 +625,13 @@ def _apply_robot_profile(stage, profile: str, camera_width: int, camera_height: 
                 "publish_back_2d_lidar_scan",
                 "publish_front_3d_lidar_scan",
             }:
-                if _set_bool_attr(stage, path + ".inputs:enabled", False):
+                desired = False
+                if profile in rtx_front_laserscan_profiles:
+                    desired = node_name in {
+                        "front_2d_lidar_render_product",
+                        "publish_front_2d_lidar_scan",
+                    }
+                if _set_bool_attr(stage, path + ".inputs:enabled", desired):
                     stats["lidar_enable_updates"] += 1
 
     return stats
